@@ -1,4 +1,4 @@
-require "link_preview/version"
+require "link_previews/version"
 require "rest-client"
 require 'nokogiri'
 
@@ -17,14 +17,35 @@ module UrlUtils
   end
 end
 
+class LinkData
+  attr_accessor :title, :image_url, :description, :errors
+
+  def assign(hash)
+    hash.each {|key, value| self.send("#{key}=", value) }
+  end
+
+  def error=(type)
+    @errors = {
+      404 => 'Page not found',
+      403 => 'Permission denied',
+      'invalid' => 'Invalid url'
+    }[type] || "Something terrible has happened"
+end
+
+  def errors_map
+  end
+end
+
 require 'uri'
 module LinkPreview
   class Factory
-    attr_accessor :url
+    attr_accessor :url, :link_data
     include ::UrlUtils
 
     def initialize(url)
       @url = urlify url
+      @link_data = LinkData.new()
+
     end
 
     def self.extract(url)
@@ -32,24 +53,13 @@ module LinkPreview
     end
 
     def extract
-      return errors unless valid?
-      {
-        title: title && title[:content],
-        image_url: image && image[:content],
-        description: description && description[:content]
-      }
-    end
-
-    def errors
-      {errors: 'Invalid Url'}
+      assign_errors unless valid?
+      build_preview
+      link_data
     end
 
     def valid?
       valid_url? && valid_response?
-    end
-
-    def og_data?
-
     end
 
     def valid_url?
@@ -63,6 +73,18 @@ module LinkPreview
     end
 
     private
+
+    def assign_errors
+      link_data.error = (response && response.code) || 'invalid'
+    end
+
+    def build_preview
+      link_data.assign({
+        title: title && title[:content],
+        image_url: image && image[:content],
+        description: description && description[:content]
+      })
+    end
 
     def parsed_body
       @parsed_body ||= ::Nokogiri::HTML.parse(response.body)
@@ -85,7 +107,7 @@ module LinkPreview
     end
 
     def request
-      ::RestClient.get url
+      ::RestClient.get url if valid_url?
     end
   end
 end
