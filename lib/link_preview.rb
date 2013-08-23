@@ -27,11 +27,11 @@ module LinkPreview
       @url = urlify url
     end
 
-    def self.create(url)
-      new(url).create
+    def self.extract(url)
+      new(url).extract
     end
 
-    def create
+    def extract
       return errors unless valid?
       {
         title: title && title[:content],
@@ -45,7 +45,7 @@ module LinkPreview
     end
 
     def valid?
-      valid_url? && valid_response? && og_data?
+      valid_url? && valid_response?
     end
 
     def og_data?
