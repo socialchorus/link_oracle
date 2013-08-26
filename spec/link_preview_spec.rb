@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe LinkPreview do
-  let(:link_data) { LinkPreview::Factory.extract('http://someurl.com') }
+  let(:link_data) { LinkPreview.extract_from('http://someurl.com') }
   let(:code) { 200 }
   let(:response_hash) {
     {
@@ -17,10 +17,9 @@ describe LinkPreview do
         <meta property=\"og:title\" content=\"This is a title\">
         <meta property=\"og:description\" content=\"A description for your face\">
         <meta property=\"og:image\" content=\"http://imageurl.com\">
-        <meta name=\"Description\" content=\" \tOfficial U.S. site for Kia Motors, featuring information on new models, local dealers, search inventory, and special offers. Find out more about the fine selection of cars, SUVs, crossovers, and minivans at Kia.com.\t\">
-        <meta name=\"Description\" content=\" \tOfficial U.S. site for Kia Motors, featuring information on new models, local dealers, search inventory, and special offers. Find out more about the fine selection of cars, SUVs, crossovers, and minivans at Kia.com.\t\">
-        <meta name=\"KEYWORDS\"    content=\" \tKia, cars, kia cars, kia motors  \t\">
-        <title>Kia Cars, SUVs, Crossovers, Minivans, &amp; Future Vehicles | Kia Motors</title>
+        <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
+        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
+        <title>TITLE!</title>
       </head>
     </html>"
   }
@@ -73,9 +72,9 @@ describe LinkPreview do
       let(:body) {
         "<html>
           <head>
-            <meta name=\"Description\" content=\" \tOfficial U.S. site for Kia Motors, featuring information on new models, local dealers, search inventory, and special offers. Find out more about the fine selection of cars, SUVs, crossovers, and minivans at Kia.com.\t\">
-            <meta name=\"KEYWORDS\"    content=\" \tKia, cars, kia cars, kia motors  \t\">
-            <title>Kia Cars, SUVs, Crossovers, Minivans, &amp; Future Vehicles | Kia Motors</title>
+            <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
+          <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
+          <title>TITLE!</title>
           </head>
         </html>"
       }
