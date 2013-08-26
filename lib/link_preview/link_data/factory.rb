@@ -6,7 +6,6 @@ class LinkData
     def initialize(url)
       @url = urlify url
       @link_data = LinkData.new()
-
     end
 
 
