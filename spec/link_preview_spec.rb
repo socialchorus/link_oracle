@@ -6,12 +6,26 @@ describe LinkPreview do
   let(:response_hash) {
     {
       code: code,
-      body: 'body',
+      body: body,
       headers: {}
     }
   }
 
-  describe '.perform' do
+  let(:body) {
+    "<html>
+      <head>
+        <meta property=\"og:title\" content=\"This is a title\">
+        <meta property=\"og:description\" content=\"A description for your face\">
+        <meta property=\"og:image\" content=\"http://imageurl.com\">
+        <meta name=\"Description\" content=\"Here is a description not for facebook\">
+        <meta name=\"KEYWORDS\"    content=\"Keywords, Keywords everywhere\">
+        <title>TITLE!</title>
+        <meta itemprop='thumbnailUrl' name='thumbnail' content='http://imageurlfrommeta.com'>
+      </head>
+    </html>"
+  }
+
+  describe 'perform' do
     before do
       RestClient.stub(:get).and_return(
         double(

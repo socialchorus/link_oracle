@@ -36,7 +36,7 @@ class LinkData
     end
 
     def build_preview
-      OGData::Extractor.new(parsed_body, link_data).perform
+      OG::Extractor.new(parsed_body, link_data).perform
     end
 
     def parsed_body

@@ -1,5 +1,5 @@
 class LinkData
-  class OGData
+  class OG
     class Extractor
       attr_accessor :link_data
       attr_reader :parsed_body
@@ -10,7 +10,7 @@ class LinkData
       end
 
       def perform
-        link_data.og_data.assign({
+        link_data.og.assign({
           title: title && title[:content],
           image_url: image && image[:content],
           description: description && description[:content]

@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe LinkData::OG::Extractor do
+describe LinkData::Meta::Extractor do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
   let(:link_data) { LinkData.new }
-  let(:extractor) { LinkData::OG::Extractor.new(parsed_body, link_data) }
+  let(:extractor) { LinkData::Meta::Extractor.new(parsed_body, link_data) }
 
   let(:body) {
     "<html>
@@ -11,9 +11,10 @@ describe LinkData::OG::Extractor do
         <meta property=\"og:title\" content=\"This is a title\">
         <meta property=\"og:description\" content=\"A description for your face\">
         <meta property=\"og:image\" content=\"http://imageurl.com\">
-        <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
-        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
+        <meta name=\"Description\" content=\"Here is a description not for facebook\">
+        <meta name=\"KEYWORDS\"    content=\"Keywords, Keywords everywhere\">
         <title>TITLE!</title>
+        <meta itemprop='thumbnailUrl' name='thumbnail' content='http://imageurlfrommeta.com'>
       </head>
     </html>"
   }
@@ -23,9 +24,6 @@ describe LinkData::OG::Extractor do
       let(:body) {
         "<html>
         <head>
-          <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
-        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
-        <title>TITLE!</title>
         </head>
       </html>"
       }
@@ -38,11 +36,10 @@ describe LinkData::OG::Extractor do
     context 'there is og_data' do
       it 'should return a populated LinkPreview object' do
         extractor.perform
-        link_data.og.title.should == 'This is a title'
-        link_data.og.image_url.should == "http://imageurl.com"
-        link_data.og.description.should == 'A description for your face'
+        link_data.meta.title.should == 'TITLE!'
+        link_data.meta.image_url.should == "http://imageurlfrommeta.com"
+        link_data.meta.description.should == 'Here is a description not for facebook'
       end
     end
-
   end
 end
