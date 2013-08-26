@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   module Extractor
     class OG < Base
       def type

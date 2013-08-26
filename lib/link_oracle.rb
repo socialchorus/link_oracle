@@ -3,9 +3,9 @@ require 'nokogiri'
 require 'uri'
 
 
-class LinkPreview
+class LinkOracle
   def self.extract_from(url)
-    parsed_data = LinkPreview::Request.new(url).parsed_data
+    parsed_data = LinkOracle::Request.new(url).parsed_data
     LinkData.new(parsed_data)
   end
 end

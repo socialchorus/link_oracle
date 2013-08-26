@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   module Extractor
     class Meta < Base
       def type

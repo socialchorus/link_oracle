@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   class LinkData
     attr_reader :parsed_data
 

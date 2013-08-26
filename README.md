@@ -1,4 +1,4 @@
-# LinkPreview
+# LinkOracle
 
 TODO: Write a gem description
 
@@ -6,7 +6,7 @@ TODO: Write a gem description
 
 Add this line to your application's Gemfile:
 
-    gem 'link_preview'
+    gem 'link_oracle'
 
 And then execute:
 
@@ -14,7 +14,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install link_preview
+    $ gem install link_oracle
 
 ## Usage
 

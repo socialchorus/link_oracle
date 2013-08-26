@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe LinkPreview do
-  let(:link_data) { LinkPreview.extract_from('http://someurl.com') }
+describe LinkOracle do
+  let(:link_data) { LinkOracle.extract_from('http://someurl.com') }
   let(:response) {
     double(
       code: 200,
@@ -44,7 +44,7 @@ describe LinkPreview do
 
   describe '.extract_from' do
     it "returns a link data object" do
-      link_data.should be_a(LinkPreview::LinkData)
+      link_data.should be_a(LinkOracle::LinkData)
     end
 
     it "defaults to the og title" do

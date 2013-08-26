@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   class Request
     attr_reader :url
 

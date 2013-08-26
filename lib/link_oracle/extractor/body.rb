@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   module Extractor
     class Body
       attr_reader :parsed_body, :link_data

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe LinkPreview::Extractor::Body do
+describe LinkOracle::Extractor::Body do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkPreview::Extractor::Body.new(parsed_body).perform }
+  let(:link_data) { LinkOracle::Extractor::Body.new(parsed_body).perform }
 
   let(:body) {
     <<-HTML

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe LinkPreview::Extractor::Meta do
+describe LinkOracle::Extractor::OG do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkPreview::Extractor::Meta.new(parsed_body).perform }
+  let(:link_data) { LinkOracle::Extractor::OG.new(parsed_body).perform }
 
   let(:body) {
     "<html>
@@ -10,19 +10,21 @@ describe LinkPreview::Extractor::Meta do
         <meta property=\"og:title\" content=\"This is a title\">
         <meta property=\"og:description\" content=\"A description for your face\">
         <meta property=\"og:image\" content=\"http://imageurl.com\">
-        <meta name=\"Description\" content=\"Here is a description not for facebook\">
-        <meta name=\"KEYWORDS\"    content=\"Keywords, Keywords everywhere\">
+        <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
+        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
         <title>TITLE!</title>
-        <meta itemprop='thumbnailUrl' name='thumbnail' content='http://imageurlfrommeta.com'>
       </head>
     </html>"
   }
 
   describe 'perform' do
-    context 'there is no suitable meta data' do
+    context 'there is no og_data' do
       let(:body) {
         "<html>
         <head>
+          <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
+        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
+        <title>TITLE!</title>
         </head>
       </html>"
       }
@@ -32,17 +34,18 @@ describe LinkPreview::Extractor::Meta do
       end
     end
 
-    context 'there is meta data' do
+    context 'there is og_data' do
+
       it 'should populate link_data title' do
-        link_data.title.should == 'TITLE!'
+        link_data.title.should == 'This is a title'
       end
 
       it 'should populate link_data image_url' do
-        link_data.image_url.should == "http://imageurlfrommeta.com"
+        link_data.image_url.should == "http://imageurl.com"
       end
 
       it 'should populate link_data description' do
-        link_data.description.should == 'Here is a description not for facebook'
+        link_data.description.should == 'A description for your face'
       end
     end
   end

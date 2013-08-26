@@ -1,4 +1,4 @@
-class LinkPreview
+class LinkOracle
   class LinkData
     class Data
       attr_accessor :titles, :image_urls, :descriptions

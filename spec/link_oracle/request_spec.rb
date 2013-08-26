@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe LinkPreview::Request do
-  let(:requester) { LinkPreview::Request.new(url) }
+describe LinkOracle::Request do
+  let(:requester) { LinkOracle::Request.new(url) }
   let(:url) { 'http://someurl.com' }
   let(:code) { 200 }
   let(:response_hash) {
@@ -43,7 +43,7 @@ describe LinkPreview::Request do
         it 'should raise PageNotFound' do
           expect {
             requester.parsed_data
-          }.to raise_error(LinkPreview::PageNotFound)
+          }.to raise_error(LinkOracle::PageNotFound)
         end
       end
 
@@ -53,7 +53,7 @@ describe LinkPreview::Request do
         it 'should raise PermissionDenied' do
           expect {
             requester.parsed_data
-          }.to raise_error(LinkPreview::PermissionDenied)
+          }.to raise_error(LinkOracle::PermissionDenied)
         end
       end
 
@@ -63,7 +63,7 @@ describe LinkPreview::Request do
         it 'should raise BadThingsHappened' do
           expect {
             requester.parsed_data
-          }.to raise_error(LinkPreview::BadThingsHappened)
+          }.to raise_error(LinkOracle::BadThingsHappened)
         end
       end
 
@@ -73,7 +73,7 @@ describe LinkPreview::Request do
         it 'should raise InvalidUrl' do
           expect {
             requester.parsed_data
-          }.to raise_error(LinkPreview::InvalidUrl)
+          }.to raise_error(LinkOracle::InvalidUrl)
         end
       end
 
@@ -85,7 +85,7 @@ describe LinkPreview::Request do
         it 'should raise ParsingError' do
           expect {
             requester.parsed_data
-          }.to raise_error(LinkPreview::ParsingError)
+          }.to raise_error(LinkOracle::ParsingError)
         end
       end
     end
