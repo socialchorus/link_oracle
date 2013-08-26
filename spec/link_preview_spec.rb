@@ -6,22 +6,9 @@ describe LinkPreview do
   let(:response_hash) {
     {
       code: code,
-      body: body,
+      body: 'body',
       headers: {}
     }
-  }
-
-  let(:body) {
-    "<html>
-      <head>
-        <meta property=\"og:title\" content=\"This is a title\">
-        <meta property=\"og:description\" content=\"A description for your face\">
-        <meta property=\"og:image\" content=\"http://imageurl.com\">
-        <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
-        <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
-        <title>TITLE!</title>
-      </head>
-    </html>"
   }
 
   describe '.perform' do
@@ -32,6 +19,7 @@ describe LinkPreview do
           response_hash
         )
       )
+      #LinkData::Factory.stub(:build)
     end
     context 'invalid url' do
 
@@ -65,30 +53,6 @@ describe LinkPreview do
 
       it 'should fail quietly' do
         expect { link_data }.to_not raise_error
-      end
-    end
-
-    context 'url is valid but no ogdata' do
-      let(:body) {
-        "<html>
-          <head>
-            <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
-          <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
-          <title>TITLE!</title>
-          </head>
-        </html>"
-      }
-
-      it 'should fail quietly' do
-        expect { link_data }.to_not raise_error
-      end
-    end
-
-    context 'everything is valid' do
-      it 'should return a populated LinkPreview object' do
-        link_data.title.should == 'This is a title'
-        link_data.image_url.should == "http://imageurl.com"
-        link_data.description.should == 'A description for your face'
       end
     end
   end

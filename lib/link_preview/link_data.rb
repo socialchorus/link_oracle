@@ -12,7 +12,4 @@ class LinkData
       'invalid' => 'Invalid url'
     }[type] || "Something terrible has happened"
   end
-
-  def errors_map
-  end
 end

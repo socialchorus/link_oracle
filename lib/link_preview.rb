@@ -1,4 +1,3 @@
-require "link_preview/version"
 require "rest-client"
 require 'nokogiri'
 require 'uri'

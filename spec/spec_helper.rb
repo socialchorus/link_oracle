@@ -7,7 +7,7 @@ require 'pry'
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-
+require "#{File.dirname(__FILE__)}/../lib/link_preview/url_utils.rb"
 Dir["#{File.dirname(__FILE__)}/../lib/**/*.rb"].each {|f| require f}
 
 
