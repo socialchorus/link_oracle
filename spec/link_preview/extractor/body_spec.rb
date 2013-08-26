@@ -1,9 +1,8 @@
 require 'spec_helper'
 
-describe LinkData::Extractor::Body do
+describe LinkPreview::Extractor::Body do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkData.new }
-  let(:extractor) { LinkData::Extractor::Body.new(parsed_body, link_data) }
+  let(:link_data) { LinkPreview::Extractor::Body.new(parsed_body).perform }
 
   let(:body) {
     <<-HTML
@@ -46,17 +45,13 @@ describe LinkData::Extractor::Body do
       }
 
       it 'should fail quietly' do
-        expect { extractor.perform }.to_not raise_error
+        expect { link_data }.to_not raise_error
       end
     end
 
     context 'there are body attributes' do
-      before do
-        extractor.perform
-      end
-
       it 'should populate link_data titles' do
-        link_data.body.titles.should == [
+        link_data.titles.should == [
           'Berkin',
           'Derbin',
           'Cherbin'
@@ -64,7 +59,7 @@ describe LinkData::Extractor::Body do
       end
 
       it 'should populate link_data image_urls' do
-        link_data.body.image_urls.should == [
+        link_data.image_urls.should == [
           "http://berkin.com",
           "http://cherbin.com",
           "http://flerbin.com"
@@ -72,7 +67,7 @@ describe LinkData::Extractor::Body do
       end
 
       it 'should populate link_data descriptions' do
-        link_data.body.descriptions.should == [
+        link_data.descriptions.should == [
           "paragraph 1",
           "paragraph 2",
           "paragraph 3"

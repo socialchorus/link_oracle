@@ -1,9 +1,8 @@
 require 'spec_helper'
 
-describe LinkData::Extractor::Meta do
+describe LinkPreview::Extractor::Meta do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkData.new }
-  let(:extractor) { LinkData::Extractor::Meta.new(parsed_body, link_data) }
+  let(:link_data) { LinkPreview::Extractor::Meta.new(parsed_body).perform }
 
   let(:body) {
     "<html>
@@ -29,25 +28,21 @@ describe LinkData::Extractor::Meta do
       }
 
       it 'should fail quietly' do
-        expect { extractor.perform }.to_not raise_error
+        expect { link_data }.to_not raise_error
       end
     end
 
     context 'there is meta data' do
-      before do
-        extractor.perform
-      end
-
       it 'should populate link_data title' do
-        link_data.meta.title.should == 'TITLE!'
+        link_data.title.should == 'TITLE!'
       end
 
       it 'should populate link_data image_url' do
-        link_data.meta.image_url.should == "http://imageurlfrommeta.com"
+        link_data.image_url.should == "http://imageurlfrommeta.com"
       end
 
       it 'should populate link_data description' do
-        link_data.meta.description.should == 'Here is a description not for facebook'
+        link_data.description.should == 'Here is a description not for facebook'
       end
     end
   end

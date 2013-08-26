@@ -1,40 +1,34 @@
-class LinkData
-  attr_accessor :errors
+class LinkPreview
+  class LinkData
+    attr_reader :parsed_data
 
-  def assign(hash)
-    hash.each {|key, value| self.send("#{key}=", value) }
-  end
+    def initialize(parsed_data)
+      @parsed_data = parsed_data
+    end
 
-  #TODO: Need to write tests for these
-  def title
-    og_data.title || meta_data.title || body.title
-  end
+    #TODO: Need to write tests for these
+    def title
+      og.title || meta.title || body.title
+    end
 
-  def description
-    og_data.description || meta_data.description|| body.description
-  end
+    def description
+      og.description || meta.description|| body.description
+    end
 
-  def image_url
-    og_data.image_url || meta_data.image_url || body.image_url
-  end
+    def image_url
+      og.image_url || meta.image_url || body.image_url
+    end
 
-  def og
-    @og ||= OG.new
-  end
+    def og
+      @og ||= Extractor::OG.new(parsed_data).perform
+    end
 
-  def meta
-    @meta ||= Meta.new
-  end
+    def meta
+      @meta ||= Extractor::Meta.new(parsed_data).perform
+    end
 
-  def body
-    @body ||= Body.new
-  end
-
-  def error=(type)
-    @errors = {
-      404 => 'Page not found',
-      403 => 'Permission denied',
-      'invalid' => 'Invalid url'
-    }[type] || "Something terrible has happened"
+    def body
+      @body ||= Extractor::Body.new(parsed_data).perform
+    end
   end
 end

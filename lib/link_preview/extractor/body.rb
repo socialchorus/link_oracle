@@ -1,21 +1,20 @@
-class LinkData
+class LinkPreview
   module Extractor
     class Body
-      attr_accessor :link_data
-      attr_reader :parsed_body
+      attr_reader :parsed_body, :link_data
 
-      #TODO: extract out for inheritance... these are all the same pretty much...
-      def initialize(parsed_body, link_data)
+      def initialize(parsed_body)
         @parsed_body = parsed_body
-        @link_data = link_data
+        @link_data = LinkData::Data.new
       end
 
       def perform
-        link_data.body.assign({
+        link_data.assign({
           titles: titles,
           image_urls: images,
           descriptions: descriptions
         })
+
       end
 
       def titles

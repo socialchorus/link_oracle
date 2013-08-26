@@ -1,17 +1,17 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'link_preview/url_utils'
+require 'link_preview/extractor/base'
 require 'link_preview/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "link_preview"
   spec.version       = LinkPreview::VERSION
-  spec.authors       = ["Ian Cooper"]
-  spec.email         = ["cooperia.ian@gmail.com"]
-  spec.description   = %q{Gets stuff for you}
-  spec.summary       = %q{Gets stuff}
-  spec.homepage      = ""
+  spec.authors       = ["Ian Cooper", 'Fito von Zastrow', 'Kane Baccigalupi']
+  spec.email         = ["developers@socialchorus.com"]
+  spec.description   = %q{Scrapes pages for open graph, meta, and lastly, body preview data}
+  spec.summary       = %q{Scrapes pages for open graph, meta, and lastly, body preview data}
+  spec.homepage      = "http://github.com/socialchorus/link_preview"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
