@@ -19,7 +19,6 @@ describe LinkPreview do
           response_hash
         )
       )
-      #LinkData::Factory.stub(:build)
     end
     context 'invalid url' do
 
