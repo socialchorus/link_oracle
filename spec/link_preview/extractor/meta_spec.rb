@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe LinkData::Meta::Extractor do
+describe LinkData::Extractor::Meta do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
   let(:link_data) { LinkData.new }
-  let(:extractor) { LinkData::Meta::Extractor.new(parsed_body, link_data) }
+  let(:extractor) { LinkData::Extractor::Meta.new(parsed_body, link_data) }
 
   let(:body) {
     "<html>
@@ -20,7 +20,7 @@ describe LinkData::Meta::Extractor do
   }
 
   describe 'perform' do
-    context 'there is no og_data' do
+    context 'there is no suitable meta data' do
       let(:body) {
         "<html>
         <head>
@@ -33,11 +33,20 @@ describe LinkData::Meta::Extractor do
       end
     end
 
-    context 'there is og_data' do
-      it 'should return a populated LinkPreview object' do
+    context 'there is meta data' do
+      before do
         extractor.perform
+      end
+
+      it 'should populate link_data title' do
         link_data.meta.title.should == 'TITLE!'
+      end
+
+      it 'should populate link_data image_url' do
         link_data.meta.image_url.should == "http://imageurlfrommeta.com"
+      end
+
+      it 'should populate link_data description' do
         link_data.meta.description.should == 'Here is a description not for facebook'
       end
     end

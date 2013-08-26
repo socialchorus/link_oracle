@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe LinkData::OG::Extractor do
+describe LinkData::Extractor::OG do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
   let(:link_data) { LinkData.new }
-  let(:extractor) { LinkData::OG::Extractor.new(parsed_body, link_data) }
+  let(:extractor) { LinkData::Extractor::OG.new(parsed_body, link_data) }
 
   let(:body) {
     "<html>
@@ -36,10 +36,19 @@ describe LinkData::OG::Extractor do
     end
 
     context 'there is og_data' do
-      it 'should return a populated LinkPreview object' do
+      before do
         extractor.perform
+      end
+
+      it 'should populate link_data title' do
         link_data.og.title.should == 'This is a title'
+      end
+
+      it 'should populate link_data image_url' do
         link_data.og.image_url.should == "http://imageurl.com"
+      end
+
+      it 'should populate link_data description' do
         link_data.og.description.should == 'A description for your face'
       end
     end

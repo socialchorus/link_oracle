@@ -1,6 +1,6 @@
 class LinkData
-  class OG
-    class Extractor
+  module Extractor
+    class OG
       attr_accessor :link_data
       attr_reader :parsed_body
 

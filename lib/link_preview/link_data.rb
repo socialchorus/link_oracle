@@ -26,6 +26,10 @@ class LinkData
     @meta ||= Meta.new
   end
 
+  def body
+    @body ||= Body.new
+  end
+
   def error=(type)
     @errors = {
       404 => 'Page not found',

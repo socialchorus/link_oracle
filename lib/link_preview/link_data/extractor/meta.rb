@@ -1,7 +1,7 @@
 require 'pry'
 class LinkData
-  class Meta
-    class Extractor
+  module Extractor
+    class Meta
       attr_accessor :link_data
       attr_reader :parsed_body
 
