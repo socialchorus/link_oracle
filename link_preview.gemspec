@@ -1,11 +1,8 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'link_oracle/extractor/base'
-require 'link_oracle/request'
-require 'link_oracle/link_data'
 require 'link_oracle/version'
-Dir["#{lib}/link_oracle/**/*.rb"].each {|f| require f}
+
 
 Gem::Specification.new do |spec|
   spec.name          = "link_oracle"
