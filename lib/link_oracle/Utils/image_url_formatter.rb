@@ -8,7 +8,12 @@ module Utils
     end
 
     def perform
-      invalid_url? ? "#{scheme}://#{host}#{image_url}" : image_url
+      return unless image_url
+      invalid_url? ? "#{scheme}://#{host}#{encoded_image_url}" : encoded_image_url
+    end
+
+    def encoded_image_url
+      URI.encode(image_url)
     end
 
     def host
@@ -23,8 +28,12 @@ module Utils
       @parsed_url ||= URI.parse(url)
     end
 
+    def parsed_image_url
+      @parsed_image_url ||= URI.parse(encoded_image_url)
+    end
+
     def invalid_url?
-      image_url[0] == '/'
+      !parsed_image_url.host
     end
   end
 end

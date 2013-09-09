@@ -17,4 +17,17 @@ describe Utils::ImageUrlFormatter do
       formatted_url.should == 'https://berkin.com/some/stupid/path'
     end
   end
+
+  context 'image_url is nil' do
+    let(:image_url) { nil }
+    it 'fails silently' do
+      expect {
+        formatted_url
+      }.not_to raise_error
+    end
+
+    it 'returns nil' do
+      formatted_url.should == nil
+    end
+  end
 end
