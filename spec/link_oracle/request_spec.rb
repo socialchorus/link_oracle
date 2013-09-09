@@ -42,7 +42,7 @@ describe LinkOracle::Request do
 
         it 'should raise PageNotFound' do
           expect {
-            requester.parsed_data
+            requester.parsed_url
           }.to raise_error(LinkOracle::PageNotFound)
         end
       end
@@ -52,7 +52,7 @@ describe LinkOracle::Request do
 
         it 'should raise PermissionDenied' do
           expect {
-            requester.parsed_data
+            requester.parsed_url
           }.to raise_error(LinkOracle::PermissionDenied)
         end
       end
@@ -62,7 +62,7 @@ describe LinkOracle::Request do
 
         it 'should raise BadThingsHappened' do
           expect {
-            requester.parsed_data
+            requester.parsed_url
           }.to raise_error(LinkOracle::BadThingsHappened)
         end
       end
@@ -72,7 +72,7 @@ describe LinkOracle::Request do
 
         it 'should raise InvalidUrl' do
           expect {
-            requester.parsed_data
+            requester.parsed_url
           }.to raise_error(LinkOracle::InvalidUrl)
         end
       end
@@ -84,7 +84,7 @@ describe LinkOracle::Request do
 
         it 'should raise ParsingError' do
           expect {
-            requester.parsed_data
+            requester.parsed_url
           }.to raise_error(LinkOracle::ParsingError)
         end
       end

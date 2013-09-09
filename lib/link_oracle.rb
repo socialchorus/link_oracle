@@ -10,7 +10,7 @@ Dir["#{File.dirname(__FILE__)}/link_oracle/**/*.rb"].each {|f| require f}
 
 class LinkOracle
   def self.extract_from(url)
-    parsed_data = LinkOracle::Request.new(url).parsed_data
-    LinkData.new(parsed_data)
+    parsed_url = LinkOracle::Request.new(url).parsed_url
+    LinkData.new(parsed_url)
   end
 end

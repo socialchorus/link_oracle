@@ -7,7 +7,7 @@ require 'link_oracle/version'
 Gem::Specification.new do |spec|
   spec.name          = "link_oracle"
   spec.version       = LinkOracle::VERSION
-  spec.authors       = ["Ian Cooper", 'Fito von Zastrow', 'Kane Baccigalupi']
+  spec.authors       = ["Ian Cooper", 'Fito von Zastrow', 'Kane Baccigalupi', 'Sowjanya Mudunuri']
   spec.email         = ["developers@socialchorus.com"]
   spec.description   = %q{Scrapes pages for open graph, meta, and lastly, body preview data}
   spec.summary       = %q{Scrapes pages for open graph, meta, and lastly, body preview data}

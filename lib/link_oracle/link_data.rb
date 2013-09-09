@@ -1,9 +1,10 @@
 class LinkOracle
   class LinkData
-    attr_reader :parsed_data
+    attr_reader :parsed_data, :url
 
-    def initialize(parsed_data)
-      @parsed_data = parsed_data
+    def initialize(parsed_url)
+      @parsed_data = parsed_url[:parsed_data]
+      @url = parsed_url[:url]
     end
 
     #TODO: Need to write tests for these
@@ -16,7 +17,7 @@ class LinkOracle
     end
 
     def image_url
-      og.image_url || meta.image_url || body.image_url
+      Utils::ImageUrlFormatter.new(url, og.image_url || meta.image_url || body.image_url).perform
     end
 
     def og

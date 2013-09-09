@@ -59,5 +59,4 @@ describe LinkOracle do
       link_data.description.should == 'A description for your face'
     end
   end
-
 end

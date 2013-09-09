@@ -6,10 +6,17 @@ class LinkOracle
       @url = url
     end
 
-    def parsed_data
+    def parsed_url
       validate_url
       validate_request
-      parsed_body
+      results
+    end
+
+    def results
+      {
+        parsed_data: parsed_data,
+        url: url
+      }
     end
 
     def validate_request
@@ -38,7 +45,7 @@ class LinkOracle
       }[response.code] || BadThingsHappened
     end
 
-    def parsed_body
+    def parsed_data
       ::Nokogiri::HTML.parse(response.body)
     rescue
       raise ParsingError
