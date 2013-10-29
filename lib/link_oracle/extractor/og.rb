@@ -6,15 +6,15 @@ class LinkOracle
       end
 
       def title
-        get_content("/html/head/meta[@property='og:title']")
+        get_content("//meta[@property='og:title']")
       end
 
       def image
-        get_content("/html/head/meta[@property='og:image']")
+        get_content("//meta[@property='og:image']")
       end
 
       def description
-        get_content("/html/head/meta[@property='og:description']")
+        get_content("//meta[@property='og:description']")
       end
     end
   end
