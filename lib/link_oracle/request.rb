@@ -34,11 +34,19 @@ class LinkOracle
     end
 
     def request
-      ::RestClient.get url
+      c = Curl::Easy.new(url)
+      c.follow_location = true
+      begin
+        c.perform
+      rescue Curl::Err::SSLConnectError
+        c.ssl_version = 3
+        c.perform
+      end
+      c
     end
 
     def error_class
-      return if response.code == 200
+      return if response.response_code == 200
       {
         404 => PageNotFound,
         403 => PermissionDenied
@@ -46,7 +54,7 @@ class LinkOracle
     end
 
     def parsed_data
-      ::Nokogiri::HTML.parse(response.body)
+      ::Nokogiri::HTML.parse(response.body_str)
     rescue
       raise ParsingError
     end
