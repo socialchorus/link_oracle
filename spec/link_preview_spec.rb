@@ -1,13 +1,14 @@
 require 'spec_helper'
 
 describe LinkOracle do
-  let(:link_data) { LinkOracle.extract_from('http://someurl.com') }
+  let(:link_data) { LinkOracle.extract_from(url) }
+  let(:url) { 'http://someurl.com' }
   let(:response) {
-    double(
-      code: 200,
+    {
+      status: 200,
       body: body,
       headers: {}
-    )
+    }
   }
 
   let(:body) {
@@ -39,7 +40,7 @@ describe LinkOracle do
     HTML
   }
   before do
-    RestClient.stub(:get).and_return(response)
+    stub_request(:any, url).to_return(response)
   end
 
   describe '.extract_from' do

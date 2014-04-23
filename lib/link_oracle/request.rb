@@ -26,7 +26,7 @@ class LinkOracle
     def validate_url
       !!URI.parse(url)
     rescue URI::InvalidURIError
-      raise InvalidUrl
+      raise InvalidUrl, url
     end
 
     def response
@@ -34,11 +34,11 @@ class LinkOracle
     end
 
     def request
-      c = Curl::Easy.new(url)
+      c = ::Curl::Easy.new(url)
       c.follow_location = true
       begin
         c.perform
-      rescue Curl::Err::SSLConnectError
+      rescue ::Curl::Err::SSLConnectError
         c.ssl_version = 3
         c.perform
       end
@@ -50,7 +50,7 @@ class LinkOracle
       {
         404 => PageNotFound,
         403 => PermissionDenied
-      }[response.code] || BadThingsHappened
+      }[response.response_code] || BadThingsHappened
     end
 
     def parsed_data

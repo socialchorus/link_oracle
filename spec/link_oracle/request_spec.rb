@@ -6,7 +6,7 @@ describe LinkOracle::Request do
   let(:code) { 200 }
   let(:response_hash) {
     {
-      code: code,
+      status: code,
       body: body,
       headers: {}
     }
@@ -26,47 +26,59 @@ describe LinkOracle::Request do
     </html>"
   }
 
+
   describe 'perform' do
-    before do
-      RestClient.stub(:get).and_return(
-        double(
-          'response',
-          response_hash
-        )
-      )
+    context 'request failures' do
+      before do
+        stub_request(:any, url).to_return(response_hash)
+      end
+
+      context 'invalid url' do
+        context 'response code is 404' do
+          let(:code) { 404 }
+
+          it 'should raise PageNotFound' do
+            expect {
+              requester.parsed_url
+            }.to raise_error(LinkOracle::PageNotFound)
+          end
+        end
+
+        context 'response code is 403' do
+          let(:code) { 403 }
+
+          it 'should raise PermissionDenied' do
+            expect {
+              requester.parsed_url
+            }.to raise_error(LinkOracle::PermissionDenied)
+          end
+        end
+
+        context 'response code is weird' do
+          let(:code) { 42 }
+
+          it 'should raise BadThingsHappened' do
+            expect {
+              requester.parsed_url
+            }.to raise_error(LinkOracle::BadThingsHappened)
+          end
+        end
+
+        context 'parsing goes awry' do
+          before do
+            ::Nokogiri::HTML.should_receive(:parse).and_raise(ArgumentError)
+          end
+
+          it 'should raise ParsingError' do
+            expect {
+              requester.parsed_url
+            }.to raise_error(LinkOracle::ParsingError)
+          end
+        end
+      end
     end
 
-    context 'invalid url' do
-      context 'response code is 404' do
-        let(:code) { 404 }
-
-        it 'should raise PageNotFound' do
-          expect {
-            requester.parsed_url
-          }.to raise_error(LinkOracle::PageNotFound)
-        end
-      end
-
-      context 'response code is 403' do
-        let(:code) { 403 }
-
-        it 'should raise PermissionDenied' do
-          expect {
-            requester.parsed_url
-          }.to raise_error(LinkOracle::PermissionDenied)
-        end
-      end
-
-      context 'response code is weird' do
-        let(:code) { 42 }
-
-        it 'should raise BadThingsHappened' do
-          expect {
-            requester.parsed_url
-          }.to raise_error(LinkOracle::BadThingsHappened)
-        end
-      end
-
+    context 'malformed url' do
       context 'url is invalid' do
         let(:url) { nil }
 
@@ -74,18 +86,6 @@ describe LinkOracle::Request do
           expect {
             requester.parsed_url
           }.to raise_error(LinkOracle::InvalidUrl)
-        end
-      end
-
-      context 'parsing goes awry' do
-        before do
-          ::Nokogiri::HTML.should_receive(:parse).and_raise(ArgumentError)
-        end
-
-        it 'should raise ParsingError' do
-          expect {
-            requester.parsed_url
-          }.to raise_error(LinkOracle::ParsingError)
         end
       end
     end
