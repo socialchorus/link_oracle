@@ -1,4 +1,4 @@
-require "rest-client"
+require 'curb'
 require 'nokogiri'
 require 'uri'
 
