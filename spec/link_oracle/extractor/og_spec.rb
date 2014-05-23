@@ -34,6 +34,33 @@ describe LinkOracle::Extractor::OG do
       end
     end
 
+    context "the og data is blank" do
+      let(:body) {
+        "<html>
+          <head>
+            <meta property=\"og:title\" content=\"\">
+            <meta property=\"og:description\" content=\"\">
+            <meta property=\"og:image\" content=\"\">
+            <meta name=\"Description\" content=\" \tHere is a description not for facebook\t\">
+            <meta name=\"KEYWORDS\"    content=\" \tKeywords, Keywords everywhere  \t\">
+            <title>TITLE!</title>
+          </head>
+        </html>"
+      }
+
+      it 'should set title to nil' do
+        link_data.title.should == nil
+      end
+
+      it 'should set description to nil' do
+        link_data.description.should == nil
+      end
+
+      it 'should set image to nil' do
+        link_data.image_url.should == nil 
+      end
+    end
+
     context 'there is og_data' do
 
       it 'should populate link_data title' do

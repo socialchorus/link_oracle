@@ -22,7 +22,7 @@ class LinkOracle
 
       def get_content(selector)
         found = parsed_body.xpath(selector).first
-        found ? [found[:content]] : []
+        (found && !found[:content].empty?) ? [found[:content]] : []
       end
     end
   end

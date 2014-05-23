@@ -32,6 +32,30 @@ describe LinkOracle::Extractor::Meta do
       end
     end
 
+    context "the meta data is there but blank" do
+      let(:body) {
+        "<html>
+          <head>
+            <meta name=\"Description\" content=\"\">
+            <title></title>
+            <meta itemprop='thumbnailUrl' name='thumbnail' content=''>
+          </head>
+        </html>"
+      }
+
+      it 'should set link_data title to nil' do
+        link_data.title.should == nil
+      end
+
+      it 'should set link_data image_url to nil' do
+        link_data.image_url.should == nil
+      end
+
+      it 'should set link_data description to nil' do
+        link_data.description.should == nil
+      end
+    end
+
     context 'there is meta data' do
       it 'should populate link_data title' do
         link_data.title.should == 'TITLE!'
