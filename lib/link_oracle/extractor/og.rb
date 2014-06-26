@@ -10,11 +10,20 @@ class LinkOracle
       end
 
       def image
-        get_content("//meta[@property='og:image']")
+        return image_data if !image_data.first
+        image_is_path? ? [] : image_data
       end
 
       def description
         get_content("//meta[@property='og:description']")
+      end
+
+      def image_is_path?
+        !!(image_data.first.match(/\A\//))
+      end
+
+      def image_data
+        get_content("//meta[@property='og:image']")
       end
     end
   end
