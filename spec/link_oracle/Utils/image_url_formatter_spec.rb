@@ -2,19 +2,31 @@ require 'spec_helper'
 
 describe Utils::ImageUrlFormatter do
   let(:url) { "http://berkin.com/whatever/else/is/here" }
-  let(:image_url) { "/some/stupid/path" }
   let(:formatted_url) { Utils::ImageUrlFormatter.new(url, image_url).perform }
 
-  context 'scheme is http' do
-    it 'should return the image as a full url using the host as domain' do
-      formatted_url.should == 'http://berkin.com/some/stupid/path'
+  context 'the host is missing from the image url' do
+    let(:image_url) { "/some/stupid/path" }
+
+    context 'scheme is http' do
+      it 'should return the image as a full url using the host as domain' do
+        expect(formatted_url).to eq('http://berkin.com/some/stupid/path')
+      end
+    end
+
+    context 'scheme is https' do
+      let(:url) { "https://berkin.com/whatever/else/is/here" }
+
+      it 'should return the image as a full url using the host as domain' do
+        expect(formatted_url).to eq('https://berkin.com/some/stupid/path')
+      end
     end
   end
 
-  context 'scheme is https' do
-    let(:url) { "https://berkin.com/whatever/else/is/here" }
-    it 'should return the image as a full url using the host as domain' do
-      formatted_url.should == 'https://berkin.com/some/stupid/path'
+  context 'but the host is present, but the scheme is missing' do
+    let(:image_url) { "//berkin.com/some/stupid/path" }
+
+    it 'should return the image as a full url using http as the protocol' do
+      expect(formatted_url).to eq('http://berkin.com/some/stupid/path')
     end
   end
 
@@ -27,7 +39,7 @@ describe Utils::ImageUrlFormatter do
     end
 
     it 'returns nil' do
-      formatted_url.should == nil
+      expect(formatted_url).to be_nil
     end
   end
 end

@@ -1,10 +1,11 @@
 class LinkOracle
   module Extractor
     class Base
-      attr_reader :parsed_body, :link_data
+      attr_reader :parsed_body, :url, :link_data
 
-      def initialize(parsed_body)
-        @parsed_body = parsed_body
+      def initialize(parsed_url)
+        @parsed_body = parsed_url[:parsed_data]
+        @url = parsed_url[:url]
         @link_data = LinkData::Data.new
       end
 

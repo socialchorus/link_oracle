@@ -1,11 +1,8 @@
 class LinkOracle
   module Extractor
-    class Body
-      attr_reader :parsed_body, :link_data
-
-      def initialize(parsed_body)
-        @parsed_body = parsed_body
-        @link_data = LinkData::Data.new
+    class Body < Base
+      def type
+        :body
       end
 
       def perform
@@ -14,7 +11,6 @@ class LinkOracle
           image_urls: images,
           descriptions: descriptions
         })
-
       end
 
       def titles
@@ -24,9 +20,30 @@ class LinkOracle
       end
 
       def images
-        @images ||= parsed_body.xpath(
-          "//img[@src[contains(.,'://') and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?'))]]"
-        ).first(3).compact.map{ |node| node['src'] }
+        @images ||= valid_size_images
+      end
+
+      def parsed_images
+        @parsed_images ||= parsed_body.xpath(
+          "//img[@src[(contains(.,'://') or contains(., '/')) and not(contains(.,'ads.') or contains(.,'ad.') or contains(.,'?') or contains(.,'.gif'))]]"
+        ).map{ |node| node['src'] }
+      end
+
+      def formatted_images
+        parsed_images.map { |image_url| ::Utils::ImageUrlFormatter.new(url, image_url).perform }
+      end
+
+      def valid_size_images
+        formatted_images.select do |image|
+          size = image_size(image)
+          size[0] >= 100 && size[1] >= 100 if size
+        end
+      end
+
+      def image_size(image)
+        ::FastImage.size(image)
+      rescue ::URI::InvalidURIError
+        [0, 0]
       end
 
       def descriptions

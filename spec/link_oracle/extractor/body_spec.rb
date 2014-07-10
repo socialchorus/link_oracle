@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe LinkOracle::Extractor::Body do
   let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkOracle::Extractor::Body.new(parsed_body).perform }
+  let(:link_data) { LinkOracle::Extractor::Body.new({ url: 'http://berkin.com', parsed_data: parsed_body}).perform }
 
   let(:body) {
     <<-HTML
@@ -34,6 +34,10 @@ describe LinkOracle::Extractor::Body do
   }
 
   describe 'perform' do
+    before do
+      FastImage.stub(:size).and_return([0, 0])
+    end
+
     context 'there is no suitable stuff in the body' do
       let(:body) {
         "<html>
@@ -58,20 +62,47 @@ describe LinkOracle::Extractor::Body do
         ]
       end
 
-      it 'should populate link_data image_urls' do
-        link_data.image_urls.should == [
-          "http://berkin.com",
-          "http://cherbin.com",
-          "http://flerbin.com"
-        ]
-      end
-
       it 'should populate link_data descriptions' do
         link_data.descriptions.should == [
           "paragraph 1",
           "paragraph 2",
           "paragraph 3"
         ]
+      end
+
+      context 'images are a correct size' do
+        before do
+          FastImage.stub(:size).and_return([100, 121])
+        end
+
+        it 'should populate link_data image_urls' do
+          expect(link_data.image_urls).to match_array([
+            "http://berkin.com",
+            "http://cherbin.com",
+            "http://flerbin.com",
+            "http://berkin.com/berkin/cherbin.jpg"
+          ])
+        end
+      end
+
+      context 'images are incorrect size' do
+        it 'should populate link_data image_urls' do
+          expect(link_data.image_urls).to eq([])
+        end
+      end
+
+      context 'some images are correct size and some are not' do
+        it 'should populate link_data image_urls only with the correctly sized images' do
+          FastImage.should_receive(:size).with("http://berkin.com").and_return([50, 60])
+          FastImage.should_receive(:size).with("http://flerbin.com").and_return([60, 55])
+          FastImage.should_receive(:size).with("http://cherbin.com").and_return([160, 155])
+          FastImage.should_receive(:size).with("http://berkin.com/berkin/cherbin.jpg").and_return([160, 155])
+
+          expect(link_data.image_urls).to match_array([
+            "http://cherbin.com",
+            "http://berkin.com/berkin/cherbin.jpg"
+          ])
+        end
       end
     end
   end

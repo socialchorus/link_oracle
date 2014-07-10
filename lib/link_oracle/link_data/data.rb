@@ -12,6 +12,10 @@ class LinkOracle
         image_urls.first
       end
 
+      def format_image(image)
+        Utils::ImageUrlFormatter.new(url, image)
+      end
+
       def title
         titles.first
       end

@@ -9,7 +9,13 @@ module Utils
 
     def perform
       return unless image_url
-      invalid_url? ? "#{scheme}://#{host}#{encoded_image_url}" : encoded_image_url
+      if host_missing?
+        "#{scheme}://#{host}#{encoded_image_url}"
+      elsif scheme_missing?
+        "http:#{encoded_image_url}"
+      else
+        encoded_image_url
+      end
     end
 
     def encoded_image_url
@@ -32,7 +38,11 @@ module Utils
       @parsed_image_url ||= URI.parse(encoded_image_url)
     end
 
-    def invalid_url?
+    def scheme_missing?
+      parsed_image_url.scheme.to_s.empty?
+    end
+
+    def host_missing?
       !parsed_image_url.host
     end
   end

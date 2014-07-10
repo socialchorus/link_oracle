@@ -1,6 +1,7 @@
 require 'curb'
 require 'nokogiri'
 require 'uri'
+require 'fastimage'
 
 require 'link_oracle/extractor/base'
 require 'link_oracle/request'
