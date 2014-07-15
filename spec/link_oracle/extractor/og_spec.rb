@@ -1,8 +1,13 @@
 require 'spec_helper'
 
 describe LinkOracle::Extractor::OG do
-  let(:parsed_body) { ::Nokogiri::HTML.parse(body) }
-  let(:link_data) { LinkOracle::Extractor::OG.new(parsed_body).perform }
+  let(:parsed_url) {
+    {
+      parsed_data: ::Nokogiri::HTML.parse(body),
+      url: 'www.some-url.com'
+    }
+  }
+  let(:link_data) { LinkOracle::Extractor::OG.new(parsed_url).perform }
 
   let(:body) {
     "<html>
