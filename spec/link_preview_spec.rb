@@ -16,7 +16,7 @@ describe LinkOracle do
       <html>
         <head>
           <meta property="og:title" content="This is a title">
-          <meta property="og:description" content="A description for your face">
+          <meta property="og:description" content=" A description for your face\n">
           <meta property="og:image" content="http://imageurl.com">
           <meta name="Description" content="Here is a description not for facebook">
           <meta name="KEYWORDS"    content="Keywords, Keywords everywhere">
