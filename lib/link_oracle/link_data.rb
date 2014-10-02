@@ -8,11 +8,13 @@ class LinkOracle
 
     #TODO: Need to write tests for these
     def title
-      (og.title || meta.title || body.title).strip
+      title = og.title || meta.title || body.title
+      title.strip if title
     end
 
     def description
-      (og.description || meta.description || body.description).strip
+      description = og.description || meta.description || body.description
+      description.strip if description
     end
 
     def image_url
