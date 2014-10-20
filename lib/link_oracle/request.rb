@@ -24,9 +24,15 @@ class LinkOracle
     end
 
     def validate_url
-      !!URI.parse(url)
+      encoded_url = encode_url(url)
+      !!URI.parse(encoded_url)
     rescue URI::InvalidURIError
       raise InvalidUrl, url
+    end
+
+    def encode_url(url)
+      return if url.nil? || url.empty?
+      URI.encode(url)
     end
 
     def response

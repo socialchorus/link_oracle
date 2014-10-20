@@ -88,6 +88,26 @@ describe LinkOracle::Request do
           }.to raise_error(LinkOracle::InvalidUrl)
         end
       end
+
+      context 'url is blank' do
+        let(:url) { '' }
+
+        it 'should raise InvalidUrl' do
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::InvalidUrl)
+        end
+      end
+
+      context "the url has weird characters in it" do
+        let(:url) { 'http://www.autoblog.com/2014/09/26/porsche-911-nissan-gtr-world-greatest-drag-race-video/?icid=autos|latest-auto-news|content' }
+
+        it "should encode and not raise an error" do
+          expect {
+            requester.parsed_url
+          }.to_not raise_error(LinkOracle::InvalidUrl)
+        end
+      end
     end
   end
 end
