@@ -50,6 +50,8 @@ class LinkOracle
         c.perform
       end
       c
+    rescue Curl::Err::HostResolutionError
+      raise ServerNotFound
     end
 
     def error_class
@@ -68,6 +70,7 @@ class LinkOracle
   end
 
   class PageNotFound < StandardError; end
+  class ServerNotFound < StandardError; end
   class PermissionDenied < StandardError; end
   class BadThingsHappened < StandardError; end
   class InvalidUrl < StandardError; end

@@ -26,14 +26,13 @@ describe LinkOracle::Request do
     </html>"
   }
 
-
-  describe 'perform' do
+  describe '#parsed_url' do
     context 'request failures' do
       before do
         stub_request(:any, url).to_return(response_hash)
       end
 
-      context 'invalid url' do
+      context 'page not found' do
         context 'response code is 404' do
           let(:code) { 404 }
 
@@ -41,6 +40,18 @@ describe LinkOracle::Request do
             expect {
               requester.parsed_url
             }.to raise_error(LinkOracle::PageNotFound)
+          end
+        end
+
+        context 'nonexistant url' do
+          it 'should raise ServerNotFound' do
+            curl = double('curl', "follow_location=" => true, "max_redirects=" => true)
+            allow(curl).to receive(:perform).and_raise(Curl::Err::HostResolutionError)
+            allow(Curl::Easy).to receive(:new).and_return(curl)
+
+            expect {
+              requester.parsed_url
+            }.to raise_error(LinkOracle::ServerNotFound)
           end
         end
 
@@ -100,12 +111,16 @@ describe LinkOracle::Request do
       end
 
       context "the url has weird characters in it" do
+        before do
+          stub_request(:any, url).to_return(response_hash)
+        end
+
         let(:url) { 'http://www.autoblog.com/2014/09/26/porsche-911-nissan-gtr-world-greatest-drag-race-video/?icid=autos|latest-auto-news|content' }
 
         it "should encode and not raise an error" do
           expect {
             requester.parsed_url
-          }.to_not raise_error(LinkOracle::InvalidUrl)
+          }.to_not raise_error
         end
       end
     end
