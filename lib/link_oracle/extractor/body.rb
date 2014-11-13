@@ -20,7 +20,7 @@ class LinkOracle
       end
 
       def images
-        @images ||= valid_size_images
+        @images ||= first_valid_size_image ? [first_valid_size_image] : []
       end
 
       def parsed_images
@@ -30,11 +30,11 @@ class LinkOracle
       end
 
       def formatted_images
-        parsed_images.map { |image_url| ::Utils::ImageUrlFormatter.new(url, image_url).perform }
+        @formatted_images ||= parsed_images.map { |image_url| ::Utils::ImageUrlFormatter.new(url, image_url).perform }
       end
 
-      def valid_size_images
-        formatted_images.select do |image|
+      def first_valid_size_image
+        @first_valid_size_image ||= formatted_images.find do |image|
           size = image_size(image)
           size[0] >= 100 && size[1] >= 100 if size
         end

@@ -75,12 +75,9 @@ describe LinkOracle::Extractor::Body do
           FastImage.stub(:size).and_return([100, 121])
         end
 
-        it 'should populate link_data image_urls' do
+        it 'should populate link_data image_urls with the first image of the right size' do
           expect(link_data.image_urls).to match_array([
-            "http://berkin.com",
-            "http://cherbin.com",
-            "http://flerbin.com",
-            "http://berkin.com/berkin/cherbin.jpg"
+            "http://berkin.com"
           ])
         end
       end
@@ -92,14 +89,13 @@ describe LinkOracle::Extractor::Body do
       end
 
       context 'some images are correct size and some are not' do
-        it 'should populate link_data image_urls only with the correctly sized images' do
+        it 'should populate link_data image_urls only with the first correctly sized images' do
           FastImage.should_receive(:size).with("http://berkin.com").and_return([50, 60])
-          FastImage.should_receive(:size).with("http://flerbin.com").and_return([60, 55])
-          FastImage.should_receive(:size).with("http://cherbin.com").and_return([160, 155])
           FastImage.should_receive(:size).with("http://berkin.com/berkin/cherbin.jpg").and_return([160, 155])
+          FastImage.should_not_receive(:size).with("http://cherbin.com")
+          FastImage.should_not_receive(:size).with("http://flerbin.com")
 
           expect(link_data.image_urls).to match_array([
-            "http://cherbin.com",
             "http://berkin.com/berkin/cherbin.jpg"
           ])
         end
