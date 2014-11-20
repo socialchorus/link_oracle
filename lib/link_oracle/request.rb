@@ -52,7 +52,7 @@ class LinkOracle
       c
     rescue Curl::Err::HostResolutionError
       raise ServerNotFound
-    rescue Curl::Err::SSLCACertificateError
+    rescue Curl::Err::SSLCACertificateError, Curl::Err::SSLPeerCertificateError
       raise BadSslCertificate
     end
 
