@@ -52,6 +52,8 @@ class LinkOracle
       c
     rescue Curl::Err::HostResolutionError
       raise ServerNotFound
+    rescue Curl::Err::SSLCACertificateError
+      raise BadSslCertificate
     end
 
     def error_class
@@ -75,4 +77,5 @@ class LinkOracle
   class BadThingsHappened < StandardError; end
   class InvalidUrl < StandardError; end
   class ParsingError < StandardError; end
+  class BadSslCertificate < StandardError ; end
 end
