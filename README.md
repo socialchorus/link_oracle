@@ -1,5 +1,7 @@
 # LinkOracle
-+[![Code Climate](https://codeclimate.com/github/socialchorus/link_oracle.png)](https://codeclimate.com/github/socialchorus/link_oracle)
+
+[![Code Climate](https://codeclimate.com/github/socialchorus/link_oracle.png)](https://codeclimate.com/github/socialchorus/link_oracle)
+
 TODO: Write a gem description
 
 ## Installation
