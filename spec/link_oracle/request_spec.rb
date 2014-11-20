@@ -29,62 +29,66 @@ describe LinkOracle::Request do
   describe '#parsed_url' do
     context 'request failures' do
       before do
-        stub_request(:any, url).to_return(response_hash)
+        stub_request(:get, url).to_return(response_hash)
       end
 
-      context 'page not found' do
-        context 'response code is 404' do
-          let(:code) { 404 }
+      context 'response code is 404' do
+        let(:code) { 404 }
 
-          it 'should raise PageNotFound' do
-            expect {
-              requester.parsed_url
-            }.to raise_error(LinkOracle::PageNotFound)
-          end
+        it 'should raise PageNotFound' do
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::PageNotFound)
+        end
+      end
+
+      context 'nonexistant url' do
+        it 'should raise ServerNotFound' do
+          stub_request(:get, url).to_raise(Curl::Err::HostResolutionError)
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::ServerNotFound)
+        end
+      end
+
+      context 'response code is 403' do
+        let(:code) { 403 }
+
+        it 'should raise PermissionDenied' do
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::PermissionDenied)
+        end
+      end
+
+      context 'response code is weird' do
+        let(:code) { 42 }
+
+        it 'should raise BadThingsHappened' do
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::BadThingsHappened)
+        end
+      end
+
+      context "when the server's SSL certificate is untrusted" do
+        it "raises BadSslCertificate" do
+          stub_request(:get, url).to_raise(Curl::Err::SSLCACertificateError)
+          expect do
+            requester.parsed_url
+           end.to raise_error(LinkOracle::BadSslCertificate)
+        end
+      end
+
+      context 'parsing goes awry' do
+        before do
+          ::Nokogiri::HTML.should_receive(:parse).and_raise(ArgumentError)
         end
 
-        context 'nonexistant url' do
-          it 'should raise ServerNotFound' do
-            curl = double('curl', "follow_location=" => true, "max_redirects=" => true)
-            allow(curl).to receive(:perform).and_raise(Curl::Err::HostResolutionError)
-            allow(Curl::Easy).to receive(:new).and_return(curl)
-
-            expect {
-              requester.parsed_url
-            }.to raise_error(LinkOracle::ServerNotFound)
-          end
-        end
-
-        context 'response code is 403' do
-          let(:code) { 403 }
-
-          it 'should raise PermissionDenied' do
-            expect {
-              requester.parsed_url
-            }.to raise_error(LinkOracle::PermissionDenied)
-          end
-        end
-
-        context 'response code is weird' do
-          let(:code) { 42 }
-
-          it 'should raise BadThingsHappened' do
-            expect {
-              requester.parsed_url
-            }.to raise_error(LinkOracle::BadThingsHappened)
-          end
-        end
-
-        context 'parsing goes awry' do
-          before do
-            ::Nokogiri::HTML.should_receive(:parse).and_raise(ArgumentError)
-          end
-
-          it 'should raise ParsingError' do
-            expect {
-              requester.parsed_url
-            }.to raise_error(LinkOracle::ParsingError)
-          end
+        it 'should raise ParsingError' do
+          expect {
+            requester.parsed_url
+          }.to raise_error(LinkOracle::ParsingError)
         end
       end
     end
@@ -112,7 +116,7 @@ describe LinkOracle::Request do
 
       context "the url has weird characters in it" do
         before do
-          stub_request(:any, url).to_return(response_hash)
+          stub_request(:get, url).to_return(response_hash)
         end
 
         let(:url) { 'http://www.autoblog.com/2014/09/26/porsche-911-nissan-gtr-world-greatest-drag-race-video/?icid=autos|latest-auto-news|content' }
