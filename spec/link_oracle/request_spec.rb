@@ -73,10 +73,13 @@ describe LinkOracle::Request do
 
       context "when the server's SSL certificate is untrusted" do
         it "raises BadSslCertificate" do
-          stub_request(:get, url).to_raise(Curl::Err::SSLCACertificateError)
-          expect do
-            requester.parsed_url
-           end.to raise_error(LinkOracle::BadSslCertificate)
+          [Curl::Err::SSLCACertificateError,
+           Curl::Err::SSLPeerCertificateError].each do |exception_class|
+            stub_request(:get, url).to_raise(exception_class)
+            expect do
+              requester.parsed_url
+             end.to raise_error(LinkOracle::BadSslCertificate)
+          end
         end
       end
 
