@@ -43,6 +43,7 @@ class LinkOracle
       c = ::Curl::Easy.new(url)
       c.follow_location = true
       c.max_redirects = 100 #there will never ever be this many redirects unless it's looping. #sorrynotsorry
+      c.headers["User-Agent"] = "link_oracle#{LinkOracle::VERSION}"
       begin
         c.perform
       rescue ::Curl::Err::SSLConnectError
